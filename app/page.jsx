@@ -28,6 +28,7 @@ export default function Home() {
     <>
     <div className="container mx-auto p-4">
       {/* Carousel */}
+      <h1><strong>Bienvenue sur notre plateforme d'évenements</strong></h1>
       <div className="relative w-full max-w-4xl mx-auto overflow-hidden">
         <button
           onClick={prevSlide}
