@@ -33,7 +33,6 @@ export default function Home() {
 
   return (
     <>
-      <Navbar />
       <div className="container mx-auto p-4">
         {/* Carousel */}
         <h1 className="text-center text-3xl font-bold mb-6">
@@ -95,7 +94,6 @@ export default function Home() {
         {/* Formulaire de Contact */}
         <ContactForm />
       </div>
-      <Footer />
     </>
   );
 }
