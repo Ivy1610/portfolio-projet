@@ -10,7 +10,11 @@ export default function ContactForm() {
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prevState) => {
+      const newState = { ...prevState, [e.target.name]: e.target.value };
+      console.log("Nouveau formData:", newState);
+      return newState;
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -29,6 +33,7 @@ export default function ContactForm() {
         alert("Message envoyé !");
         setFormData({ name: "", email: "", message: "" });
       } else {
+        console.log("Données envoyées:", formData);
         alert("Une erreur est survenue, lors de l'envoie du message. !");
       }
     } catch (error) {
