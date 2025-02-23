@@ -31,7 +31,6 @@ export default function RootLayout({ children }) {
       >
         <Header />
         {children}
-        <ContactForm />
         <Footer />
       </body>
     </html>
