@@ -58,7 +58,7 @@ export const Navbar = () => {
                     <li key={index} className="nav-item">
                         <Link
                             href={item.path}
-                            className="block px-6 py-3 text-white transition-all duration-300 hover:bg-purple-500 hover:text-gray-300"
+                            className="block px-6 py-3 text-white transition-all duration-300 hover:bg-blue-900 hover:text-pink-300"
                             onClick={closeMenu}
                         >
                             {item.name}
