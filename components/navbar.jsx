@@ -26,9 +26,9 @@ export const Navbar = () => {
     }, []);
 
     return (
-        <nav className="bg-purple-500 shadow-md p-4 flex items-center justify-between relative">
+        <nav className="bg-purple-500 bg-opacity-90 shadow-md p-4 flex items-center justify-start relative z-50">
             {/* Logo - À gauche */}
-            <div className="text-white text-xl font-bold">
+            <div className="text-white text-xl font-bold mr-6">
                 <Link href="/">
                     <span>YOULIVEVENT</span>
                 </Link>
@@ -58,7 +58,7 @@ export const Navbar = () => {
                     <li key={index} className="nav-item">
                         <Link
                             href={item.path}
-                            className="block px-6 py-3 text-white transition-all duration-300 hover:bg-blue-900 hover:text-pink-300"
+                            className="block px-6 py-3 text-white transition-all duration-300 hover:bg-blue-900 opacity-90 hover:text-pink-300"
                             onClick={closeMenu}
                         >
                             {item.name}
