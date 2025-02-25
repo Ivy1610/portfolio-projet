@@ -6,6 +6,7 @@ import { Navbar } from "../components/navbar";
 import { Footer } from "../components/footer";
 import  ContactForm  from "../components/ContactForm";
 import { Header } from "@/components/Header";
+import AnimationBackground from "@/components/AnimationBackground";
 
 
 const geistSans = Geist({
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <AnimationBackground />
         <Header />
         {children}
         <Footer

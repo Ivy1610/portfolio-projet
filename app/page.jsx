@@ -3,8 +3,6 @@
 import { useState, useEffect } from "react";
 import { imagesArray } from "@/utils/imagesLink";
 import Image from "next/image";
-import { Navbar } from "../components/navbar";
-import { Footer } from "../components/footer";
 import ContactForm from "../components/ContactForm";
 
 export default function Home() {
