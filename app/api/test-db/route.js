@@ -3,7 +3,7 @@ import clientPromise from "@/lib/mongodb";
 export async function GET() {
   try {
     const client = await clientPromise;
-    const db = client.db("custer0"); // Change "cluster0" en "youlive" si c'est le vrai nom
+    const db = client.db("youlive"); // Change "cluster0" en "youlive" si c'est le vrai nom
     const collection = db.collection("gallery");
 
     // Vérifier que la collection existe

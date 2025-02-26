@@ -28,10 +28,15 @@ export default function GalleryManager() {
           },
           body: JSON.stringify({ data: base64data }),
         });
+
+        if (!response.ok) {
+          throw new Error('Erreur de réseau ou de reponse serveur');
+        }
+
         const data = await response.json();
         setUrl(data.url);
       } catch (error) {
-        console.error(error);
+        console.error("Erreur lors de l\'upload:", error);
       }
     };
   };
@@ -46,14 +51,15 @@ export default function GalleryManager() {
         },
         body: JSON.stringify({ user_id: userId, password }),
       });
-      const data = await response.json();
-      if (response.ok) {
-        setVideos(data.videos);
-      } else {
-        alert(data.message);
+
+      if (!response.ok) {
+        throw new Error('Erreur de réseau ou de reponse serveur');
       }
+
+      const data = await response.json();
+      setVideos(data.videos);
     } catch (error) {
-      console.error(error);
+      console.error("Erreur lors de la recuperation des vidéo:", error);
       alert('Une erreur est survenue lors de la récupération des vidéos.');
     }
   };
@@ -63,11 +69,11 @@ export default function GalleryManager() {
       {/* Formulaire d'upload */}
       <form onSubmit={handleUploadSubmit}>
         <input type="file" onChange={handleFileChange} />
-        <button type="submit">Uploader</button>
+        <button type="submit">Télécharger</button>
       </form>
       {url && (
         <div>
-          <h3>Fichier uploadé :</h3>
+          <h3>Fichier téléchargé :</h3>
           <a href={url} target="_blank" rel="noopener noreferrer">
             Voir le fichier
           </a>
@@ -81,12 +87,14 @@ export default function GalleryManager() {
           placeholder="User ID"
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
+          autoComplete="username"
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          autoComplete="current-password"
         />
         <button type="submit">Récupérer les vidéos</button>
       </form>

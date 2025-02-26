@@ -46,6 +46,7 @@ export default function GalleryPage() {
                   width={400}
                   height={250}
                   className="rounded-md"
+                  style={{ width: 'auto', height: 'auto' }}
                 />
               ) : (
                 <iframe

@@ -1,9 +1,9 @@
-import { db } from "$lib/mongodb";
+import { clientPromise } from "$lib/mongodb";
 
 
 export async function GET(req, { params }) {
     try {
-      const event = await db.event.findUnique({
+      const event = await clientPromise.event.findUnique({
         where: { id: params.id },
       });
   
