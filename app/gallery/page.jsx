@@ -1,79 +1,70 @@
 "use client";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import GalleryManage from "@/components/GalleryManage";
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-
-const Gallery = () => {
-    const [galleryItems, setGalleryItems] = useState([]);
+export default function GalleryPage() {
+  const [galleryItems, setGalleryItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Simuler une récupération de données (API ou MongoDB)
     const fetchGallery = async () => {
-      const response = await fetch("/api/gallery"); // API fictive pour les images/vidéos
-      const data = await response.json();
-      setGalleryItems(data);
+      try {
+        const response = await fetch("/api/gallery");
+        if (!response.ok) throw new Error("Erreur de chargement");
+        const data = await response.json();
+        setGalleryItems(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchGallery();
   }, []);
 
   return (
-    <div>
-      {/* Header */}
-      <header className="bg-purple-600 text-white p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Galerie</h1>
-        <nav>
-          <ul className="hidden md:flex space-x-4">
-            <li><Link href="/">Accueil</Link></li>
-            <li><Link href="/events">Événements</Link></li>
-            <li><Link href="/gallery">Galerie</Link></li>
-            <li><Link href="/services">Prestations</Link></li>
-            <li><Link href="/contact">Contact</Link></li>
-          </ul>
-        </nav>
-        {/* Menu mobile */}
-        <div className="md:hidden">
-          <ion-icon name="menu-outline" size="large"></ion-icon>
-        </div>
-      </header>
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold text-center mb-6">📸 Galerie</h1>
+      <h2 className="text-2xl font-bold text-center mb-4">Photos et Vidéos</h2>
 
-      {/* Contenu */}
-      <main className="container mx-auto p-6">
-        <h2 className="text-xl font-bold mb-4">Photos et Vidéos</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {galleryItems.length > 0 ? (
-            galleryItems.map((item, index) => (
-              <div key={index} className="border p-2 rounded-md shadow-lg">
-                {item.type === "image" ? (
-                  <Image
-                    src={item.url}
-                    alt={`Gallery item ${index + 1}`}
-                    width={300}
-                    height={200}
-                    className="rounded-md"
-                  />
-                ) : (
-                  <iframe
-                    className="w-full h-40"
-                    src={item.url}
-                    title={`Gallery video ${index + 1}`}
-                    allowFullScreen
-                  ></iframe>
-                )}
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-600">Aucune photo ou vidéo disponible pour le moment.</p>
-          )}
-        </div>
-      </main>
+      {/* Gestion du chargement et des erreurs */}
+      {loading && <p className="text-center text-gray-500">Chargement des images...</p>}
+      {error && <p className="text-center text-red-500">{error}</p>}
 
-      {/* Scripts pour les icônes */}
-      <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-      <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    </div>
+      {/* Affichage de la galerie */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {galleryItems.length > 0 ? (
+          galleryItems.map((item, index) => (
+            <div key={index} className="border p-2 rounded-lg shadow-md bg-white">
+              {item.type === "image" ? (
+                <Image
+                  src={item.url}
+                  alt={`Gallery item ${index + 1}`}
+                  width={400}
+                  height={250}
+                  className="rounded-md"
+                />
+              ) : (
+                <iframe
+                  className="w-full h-52 rounded-md"
+                  src={item.url}
+                  title={`Gallery video ${index + 1}`}
+                  allowFullScreen
+                ></iframe>
+              )}
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-500 text-center col-span-3">Aucune photo ou vidéo disponible.</p>
+        )}
+      </div>
+      
+      {/* Gestionaire de gallerie */}
+      <GalleryManage />
+      </div>
   );
 }
 
-export default Gallery

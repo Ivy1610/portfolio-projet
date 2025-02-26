@@ -27,7 +27,6 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <AnimationBackground />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
