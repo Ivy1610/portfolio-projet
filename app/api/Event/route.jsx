@@ -1,8 +1,8 @@
-import db from '@/utils/db'; // Connexion à la DB
+import { mongodb } from "$lib/mongodb";
 
 export async function GET(req, { params }) {
     try {
-      const event = await db.event.findUnique({
+      const event = await mongodb.event.findUnique({
         where: { id: params.id },
       });
   
