@@ -9,7 +9,7 @@ const Contact = () => {
         <h2 className="text-2xl font-bold">Informations de Contact</h2>
         <p>Pour toute question, veuillez nous contacter à l'adresse suivante :</p>
         <p>Email : youlivevent@gmail.com</p>
-        <p>Téléphone : +33 1 00 00 00 00</p>
+        <p>Téléphone : +33 ... ...</p>
       </div>
       <div>
         <h2 className="text-2xl font-bold"></h2>

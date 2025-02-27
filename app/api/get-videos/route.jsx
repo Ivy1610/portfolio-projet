@@ -31,7 +31,7 @@ cloudinary.config({
 
 export default async function handler(req, res) {
   const client = await clientPromise;
-  const db = client.db('your-database-name');
+  const db = client.db('youlive');
   const collection = db.collection('events');
 
   if (req.method === 'POST') {

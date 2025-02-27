@@ -3,12 +3,15 @@
 import { useState, useEffect } from "react";
 import { imagesArray } from "@/utils/imagesLink";
 import Image from "next/image";
+<<<<<<< HEAD
 import { Navbar } from "../components/navbar";
 import { Footer } from "../components/chat"
 import ContactForm from "../components/ContactForm";
+=======
+import Link from "next/link";
+>>>>>>> 46c82ed6d5d492a8926ec99e0923edc7d7928567
 
 export default function Home() {
-  const session = null;
   const [currentIndex, setCurrentIndex] = useState(0);
   const visibleSlides = 4; // Nombre d'images affichées simultanément
 
@@ -33,6 +36,21 @@ export default function Home() {
 
   return (
     <>
+      <div className="space-y">
+        {/* Bouton Login/Inscription */}
+        <Link href="/login">
+          <button className="w-34 bg-purple-700 text-white py-2 px-4 rounded-lg hover:bg-purple-400 transition">
+            Inscription
+          </button>
+        </Link>
+        {/* Bouton Déjà inscrit */}
+        <Link href="/login">
+          <button className="w-33 bg-purple-700 text-white py-2 px-4 rounded-lg hover:bg-purple-400 transition">
+            Déjà inscrit
+          </button>
+        </Link>
+      </div>
+
       <div className="container mx-auto p-4">
         {/* Carousel */}
         <h1 className="text-center text-3xl font-bold mb-6">
@@ -52,13 +70,15 @@ export default function Home() {
             {imagesArray
               .slice(currentIndex, currentIndex + visibleSlides)
               .map((image, index) => (
-                <div key={index} className="flex-shrink-0 w-1/4 px-2">
+                <div key={index} className="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-2">
                   <Image
                     src={image}
                     alt={`Slide ${index + 1}`}
                     width={300}
                     height={200}
                     className="rounded-lg"
+                    placeholder="blur"
+                    blurDataURL="data:image/png;base64,..."
                   />
                 </div>
               ))}
@@ -73,27 +93,72 @@ export default function Home() {
           </button>
         </div>
 
+        {/* Indicateurs de position */}
+        <div className="flex justify-center mt-4 space-x-2">
+          {Array.from({ length: imagesArray.length - visibleSlides + 1 }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`w-3 h-3 rounded-full ${currentIndex === index ? "bg-gray-800" : "bg-gray-400"
+                }`}
+            />
+          ))}
+        </div>
+
         {/* Section YOULIVEVENT */}
         <section className="mt-10 text-center">
           <h2 className="text-2xl font-bold">Qu'est-ce que YOULIVEVENT ?</h2>
-          <p className="mt-4 text-lg">
-            Découvrez YOULIVEVENT, une plateforme interactive révolutionnaire
-            pour vos événements. Avec notre service, chaque participant peut
-            partager en direct des vidéos et contenus qui seront projetés sur
-            des écrans sur place, créant ainsi une expérience immersive et
-            collective.
-          </p>
-          <p className="mt-4 text-lg">
-            Nous compilons tous ces contenus pour former une capsule temporelle
-            numérique, préservant vos souvenirs de manière innovante et
-            durable. Grâce aux vidéos en direct, chaque participant contribue à
-            l'événement en temps réel, qu'il soit présent ou non.
-          </p>
+          <div className="mt-4 text-lg">
+            <p className="mt-4 text-lg">
+              Découvrez YOULIVEVENT, une plateforme interactive révolutionnaire pour vos événements.
+              Grâce à notre service, chaque participant peut partager en direct des vidéos et des contenus,
+              créant ainsi une expérience immersive et collective.
+            </p>
+            <br />
+            <p className="mt-4 text-lg">
+              Que vous soyez sur place ou à distance, participez à l'événement en temps réel
+              et partagez vos souvenirs avec les autres. <strong>YOULIVEVENT</strong> est une solution innovante
+              pour capturer des moments uniques lors de vos événements.
+            </p>
+            <br />
+            <p className="mt-4 text-lg">
+              Nous rassemblons tous ces contenus pour créer une capsule temporelle numérique,
+              préservant vos souvenirs de manière innovante et durable. Les vidéos en direct permettent à chaque
+              participant de contribuer à l'événement en temps réel, qu'il soit présent ou non.
+            </p>
+            <div>
+              <p className="mt-4 text-lg">
+                <strong>YOULIVEVENT</strong>
+                est la solution idéale pour immortaliser vos événements,
+                qu'ils soient professionnels ou personnels
+              </p>
+              <br />
+              <p className="mt-4 text-lg">
+                En compilant tous les contenus partagés,
+                nous formons une capsule temporelle numérique qui préserve vos souvenirs de manière
+                innovante et durable. Grâce aux vidéos en direct, chaque participant peut s'impliquer activement,
+                même à distance.
+              </p>
+            </div>
+          </div>
         </section>
 
-        {/* Formulaire de Contact */}
-        <ContactForm />
+        {/* Barre de redirection vers la page de contact */}
+        <div className="mt-10 text-center">
+          <p className="text-lg">
+            Vous souhaitez en savoir plus sur nos services
+            ou nous contacter pour une demande spécifique ?
+          </p>
+          <br />
+          <Link
+            href="/contact"
+            className="inline-block bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+          >
+            Contactez-nous
+          </Link>
+        </div>
       </div>
     </>
   );
 }
+

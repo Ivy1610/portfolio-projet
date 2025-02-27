@@ -20,6 +20,11 @@ export default function ContactForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.name || !formData.email || !formData.message) {
+      alert("Veuillez remplir tous les champs");
+      return;
+    }
+
     try {
       const response = await fetch('/api/send-email', {
         method: 'POST',

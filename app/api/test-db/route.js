@@ -1,29 +1,25 @@
 import clientPromise from "@/lib/mongodb";
 
-// Exporter une fonction nommée pour la méthode GET
-export async function GET(request) {
+export async function GET() {
   try {
-    // Connexion à la base de données
     const client = await clientPromise;
-    const db = client.db("cluster0"); // Remplacez "cluster0" par le nom de votre base MongoDB
+    const db = client.db("youlive"); // Change "cluster0" en "youlive" si c'est le vrai nom
+    const collection = db.collection("gallery");
 
-    // Vérifie si la connexion est active
-    await db.command({ ping: 1 });
+    // Vérifier que la collection existe
+    const galleryItems = await collection.find({}).toArray();
+    if (!galleryItems.length) {
+      throw new Error("Aucune image/vidéo trouvée dans la base de données.");
+    }
 
-    return new Response(JSON.stringify({ message: "✅ Connexion réussie à MongoDB !" }), {
+    return new Response(JSON.stringify(galleryItems), {
+      headers: { "Content-Type": "application/json" },
       status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: "❌ Erreur de connexion à MongoDB", details: error.message }), {
+    return new Response(JSON.stringify({ error: error.message }), {
+      headers: { "Content-Type": "application/json" },
       status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
   }
 }
-
-// Vous pouvez ajouter d'autres méthodes (POST, PUT, DELETE, etc.) si nécessaire
