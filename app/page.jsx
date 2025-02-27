@@ -30,6 +30,21 @@ export default function Home() {
 
   return (
     <>
+      <div className=" flex flex-col space-y">
+        {/* Bouton Login/Inscription */}
+        <Link href="/login">
+          <button className="w-64 bg-purple-700 text-white py-2 px-4 rounded-lg hover:bg-purple-400 transition">
+            Inscription
+          </button>
+        </Link>
+        {/* Bouton Déjà inscrit */}
+        <Link href="/login">
+          <button className="w-64 bg-purple-700 text-white py-2 px-4 rounded-lg hover:bg-purple-400 transition">
+            Déjà inscrit
+          </button>
+        </Link>
+      </div>
+
       <div className="container mx-auto p-4">
         {/* Carousel */}
         <h1 className="text-center text-3xl font-bold mb-6">
