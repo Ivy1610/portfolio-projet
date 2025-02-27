@@ -30,16 +30,16 @@ export default function Home() {
 
   return (
     <>
-      <div className=" flex flex-col space-y">
+      <div className="space-y">
         {/* Bouton Login/Inscription */}
         <Link href="/login">
-          <button className="w-64 bg-purple-700 text-white py-2 px-4 rounded-lg hover:bg-purple-400 transition">
+          <button className="w-34 bg-purple-700 text-white py-2 px-4 rounded-lg hover:bg-purple-400 transition">
             Inscription
           </button>
         </Link>
         {/* Bouton Déjà inscrit */}
         <Link href="/login">
-          <button className="w-64 bg-purple-700 text-white py-2 px-4 rounded-lg hover:bg-purple-400 transition">
+          <button className="w-33 bg-purple-700 text-white py-2 px-4 rounded-lg hover:bg-purple-400 transition">
             Déjà inscrit
           </button>
         </Link>
