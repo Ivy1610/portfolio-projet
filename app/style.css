@@ -238,7 +238,7 @@ footer.visible {
     display: inline-block;
     font-size: 16px;
     padding: 10px 15px;
-    background-color: var(--beige-fonce);
+    background-color: var(--purple-fonce);
     color: var(--texte-blanc);
     text-align: center;
     border-radius: 5px;

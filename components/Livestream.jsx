@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter} from "next/navigation";
+import { Navbar } from './navbar';
 
 export default function Events() {
   const [events, setEvents] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
-    fetch("/api/events")
+    fetch("/api/Event")
       .then((res) => res.json())
       .then((data) => setEvents(data))
       .catch((err) => console.error("Erreur chargement événements", err));

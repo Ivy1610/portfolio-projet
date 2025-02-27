@@ -26,7 +26,7 @@ export const Navbar = () => {
     }, []);
 
     return (
-        <nav className="bg-purple-500 shadow-md p-4 flex items-center justify-between relative">
+        <nav className="bg-purple-700 shadow-md p-4 flex items-center justify-between relative">
             {/* Logo - À gauche */}
             <div className="text-white text-xl font-bold">
                 <Link href="/">
@@ -39,9 +39,9 @@ export const Navbar = () => {
                 className="menu-toggle md:hidden flex flex-col space-y-1.5 p-2 z-50"
                 onClick={toggleMenu}
             >
-                <span className={`block w-6 h-0.5 bg-white transition-transform duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`}></span>
-                <span className={`block w-6 h-0.5 bg-white transition-opacity duration-300 ${menuOpen ? "opacity-0" : ""}`}></span>
-                <span className={`block w-6 h-0.5 bg-white transition-transform duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`}></span>
+                <span className={`block w-6 h-0.5 bg-purple-500 transition-transform duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`}></span>
+                <span className={`block w-6 h-0.5 bg-purple-500 transition-opacity duration-300 ${menuOpen ? "opacity-0" : ""}`}></span>
+                <span className={`block w-6 h-0.5 bg-purple-500 transition-transform duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`}></span>
             </button>
 
             {/* Menu Links - Affiché en mobile si menuOpen est `true`, toujours visible en desktop */}
@@ -58,7 +58,7 @@ export const Navbar = () => {
                     <li key={index} className="nav-item">
                         <Link
                             href={item.path}
-                            className="block px-6 py-3 text-white transition-all duration-300 hover:bg-purple-500 hover:text-gray-300"
+                            className="block px-6 py-3 text-white transition-all duration-300 hover:bg-blue-900 hover:text-pink-300"
                             onClick={closeMenu}
                         >
                             {item.name}

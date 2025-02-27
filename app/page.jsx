@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { imagesArray } from "@/utils/imagesLink";
 import Image from "next/image";
 import { Navbar } from "../components/navbar";
-import { Footer } from "../components/footer";
+import { Footer } from "../components/chat"
 import ContactForm from "../components/ContactForm";
 
 export default function Home() {
@@ -42,7 +42,7 @@ export default function Home() {
           {/* Bouton Précédent */}
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full z-10"
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-blue-800 text-white p-2 rounded-full z-10"
           >
             ◀
           </button>
