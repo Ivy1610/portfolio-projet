@@ -238,7 +238,7 @@ footer.visible {
     display: inline-block;
     font-size: 16px;
     padding: 10px 15px;
-    background-color: var(--purple-fonce);
+    background-color: var(-purple-fonce);
     color: var(--texte-blanc);
     text-align: center;
     border-radius: 5px;
@@ -296,7 +296,7 @@ footer.visible {
 }
 
 .footer-links a:hover {
-    color: var(--beige-clair);
+    color: var(--purple-clair);
 }
 
 @media (max-width: 680px) {

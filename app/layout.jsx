@@ -3,13 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import { Navbar } from "../components/navbar";
-<<<<<<< HEAD
-import { Footer } from "../components/chat";
-import  ContactForm  from "../components/ContactForm";
-=======
 import { Footer } from "../components/footer";
 import ContactForm from "../components/ContactForm";
->>>>>>> 46c82ed6d5d492a8926ec99e0923edc7d7928567
 import { Header } from "@/components/Header";
 import AnimationBackground from "@/components/AnimationBackground";
 

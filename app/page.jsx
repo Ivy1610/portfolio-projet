@@ -3,13 +3,7 @@
 import { useState, useEffect } from "react";
 import { imagesArray } from "@/utils/imagesLink";
 import Image from "next/image";
-<<<<<<< HEAD
-import { Navbar } from "../components/navbar";
-import { Footer } from "../components/chat"
-import ContactForm from "../components/ContactForm";
-=======
 import Link from "next/link";
->>>>>>> 46c82ed6d5d492a8926ec99e0923edc7d7928567
 
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);

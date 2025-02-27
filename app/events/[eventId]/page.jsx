@@ -1,7 +1,7 @@
 "use client"
 import { useRouter } from 'next/router';
-import ChatComponent from '../../components/Chat';
-import LiveStream from '../../components/LiveStream';
+import ChatComponent from '../../../components/Chat';
+import LiveStream from '../../../components/LiveStream';
 
 const EventPage = () => {
   const router = useRouter();
