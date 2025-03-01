@@ -1,21 +1,23 @@
-"use client"
-import { useRouter } from 'next/router';
-import ChatComponent from '../../../components/Chat';
-import LiveStream from '../../../components/LiveStream';
+"use client"; // Indique que ce composant est côté client
+import { useParams } from "next/navigation"; // Pour récupérer l'ID de l'événement
+import ChatComponent from "../../../components/chat"; // Composant de chat
+import LiveStream from "../../../components/Livestream"; // Composant de streaming
 
 const EventPage = () => {
-  const router = useRouter();
-  const { eventId } = router.query;
+  const params = useParams();
+  const eventId = params.eventId; // Récupère l'ID de l'événement depuis l'URL
 
   // Simuler un utilisateur connecté
   const user = {
-    id: 'Ivy24',
-    name: 'Yveline',
+    id: "Ivy24",
+    name: "Yveline",
   };
-  
+
   return (
     <div className="container mx-auto p-4 flex-grow">
-      <h2 className="text-center text-3xl font-bold mb-6">Événement {eventId}</h2>
+      <h2 className="text-center text-3xl font-bold mb-6">
+        Événement {eventId}
+      </h2>
 
       {/* Lecteur de streaming */}
       <div className="mb-8">

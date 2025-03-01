@@ -1,16 +1,14 @@
-"use client"
-
-import { useEffect, useState } from 'react';
-import { StreamChat } from 'stream-chat';
-import { Chat, Channel, Window, ChannelHeader, MessageList, MessageInput } from 'stream-chat-react';
-import 'stream-chat-react/dist/css/index.css';
+"use client";
+import { useEffect, useState } from "react";
+import { StreamChat } from "stream-chat";
+import { Chat, Channel, Window, ChannelHeader, MessageList, MessageInput } from "stream-chat-react";
 
 const ChatComponent = ({ user, eventId }) => {
   const [chatClient, setChatClient] = useState(null);
 
   useEffect(() => {
     const initChat = async () => {
-      const client = StreamChat.getInstance('n3esdddgvfpz'); // Votre API Key
+      const client = StreamChat.getInstance("n3esdddgvfpz"); // Votre API Key
 
       // Récupérer le token côté serveur
       const response = await fetch(`/api/token?userId=${user.id}`);
@@ -24,27 +22,30 @@ const ChatComponent = ({ user, eventId }) => {
         token
       );
 
+      const channel = client.channel("messaging", `event-${eventId}`, {
+        name: `Event ${eventId}`,
+        members: [user.id],
+      });
+
+      await channel.watch();
+
       setChatClient(client);
     };
 
     initChat();
 
     return () => {
-      if (chatClient) chatClient.disconnectUser();
+      if (chatClient) {
+        chatClient.disconnectUser();
+      }
     };
-  }, [user.id, user.name]);
+  }, [eventId, user.id, user.name]);
 
   if (!chatClient) return <div>Loading chat...</div>;
 
-  // Créez un canal de chat pour l'événement
-  const channel = chatClient.channel('event', eventId, {
-    name: `Événement ${eventId}`,
-    members: [user.id],
-  });
-
   return (
     <Chat client={chatClient}>
-      <Channel channel={channel}>
+      <Channel channel={`event-${eventId}`}>
         <Window>
           <ChannelHeader />
           <MessageList />

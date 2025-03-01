@@ -6,9 +6,9 @@ const Event = () => {
 
   // Données des événements (à remplacer par vos données réelles)
   const events = [
-    { id: 2024, name: 'DEMODAY C24', password: 'secret123' },
+    { id: 2024, name: 'DEMODAY C24', date: "20 Mars", password: 'secret123' },
     { id: 2, name: 'Événement 2', password: 'event2024' },
-    { id: 3, name: 'Événement 3', password: 'pass2025' },
+    { id: 3, name: 'Concert Live', password: 'pass2025' },
   ];
 
   const handleEventClick = (eventId) => {
