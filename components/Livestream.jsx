@@ -1,14 +1,14 @@
-"use client"; // Indique que ce composant est côté client
-import { useEffect, useState } from "react";
+"use client";
+import React from "react"; // Importez React une seule fois
 import { StreamVideoClient, StreamVideo } from "@stream-io/video-react-sdk";
 import { useCallState } from "@stream-io/video-react-sdk";
 
 const LiveStream = ({ eventId }) => {
-  const [videoClient, setVideoClient] = useState(null);
-  const [call, setCall] = useState(null);
-  const [error, setError] = useState(null); // Pour gérer les erreurs
+  const [videoClient, setVideoClient] = React.useState(null); // Utilisez React.useState
+  const [call, setCall] = React.useState(null); // Utilisez React.useState
+  const [error, setError] = React.useState(null); // Utilisez React.useState
 
-  useEffect(() => {
+  React.useEffect(() => { // Utilisez React.useEffect
     const initStream = async () => {
       try {
         // Récupérer le token côté serveur

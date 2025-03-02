@@ -150,9 +150,5 @@ footer {
 }
 
 .footer-links a:hover {
-<<<<<<< HEAD
-  color: var(--beige-clair);
-=======
     color: yellow
->>>>>>> 7c5ee086ea570e5327a16b14d8645fbffecabd3f
 }

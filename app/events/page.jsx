@@ -1,8 +1,11 @@
 "use client"
 import React, { useState } from 'react';
+import { useRouter } from "next/navigation";
 
 const Event = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const router = useRouter();
+  const [error, setError] = useState(null);
 
   // Données des événements (à remplacer par vos données réelles)
   const events = [
@@ -12,16 +15,26 @@ const Event = () => {
   ];
 
   const handleEventClick = (eventId) => {
+    console.log("Événement sélectionné :", eventId); // Affiche l'ID de l'événement
     setSelectedEvent(eventId);
-  }
+  };
 
 
   const handleAccessSubmit = (e) => {
     e.preventDefault();
-    const password = e.target.password.value; // Récupérer le mot de passe
-    console.log('Accès à l\'événement:', { eventId: selectedEvent, password });
-    // Logique pour accéder à l'événement
-    alert(`Accès à l'événement ${selectedEvent} demandé`);
+    const password = e.target.password.value;
+    const event = events.find((ev) => ev.id === selectedEvent);
+  
+    console.log("Événement sélectionné :", selectedEvent); // Affiche l'ID de l'événement
+    console.log("Événement trouvé :", event); // Affiche l'événement trouvé
+    console.log("Mot de passe saisi :", password); // Affiche le mot de passe saisi
+  
+    if (event && event.password === password) {
+      console.log("Mot de passe correct. Redirection en cours...");
+      router.push(`/events/${selectedEvent}`); // Rediriger vers la page de l'événement
+    } else {
+      setError("Mot de passe incorrect");
+    }
   };
 
   return (
