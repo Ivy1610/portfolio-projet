@@ -1,6 +1,7 @@
 import { connectToMongoose } from "../../lib/mongodb";
 import Contact from "../../models/Contact"; // Import du modèle Mongoose
 
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Méthode non autorisée" });

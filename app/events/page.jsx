@@ -41,6 +41,16 @@ const Event = () => {
     <div className="container mx-auto p-4 flex-grow">
       <h2 className="text-center text-3xl font-bold mb-6">Événements en cours</h2>
 
+      {/* Bouton de création d'événement */}
+      <div className="mb-8">
+        <button
+          onClick={handleCreateEvent}
+          className="w-full bg-green-500 text-white p-2 rounded-md hover:bg-green-600 transition duration-300"
+        >
+          Créer un nouvel événement
+        </button>
+      </div>
+
       {/* Liste des événements */}
       <div className="mb-8 bg-pink-150 p-6 rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-4">Choisissez un événement</h2>

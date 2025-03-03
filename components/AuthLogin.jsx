@@ -20,7 +20,7 @@ export default function AuthLogin() {
     const data = await response.json();
     if (response.ok) {
       localStorage.setItem("token", data.token); // Stocke le token
-      router.push("/evenement"); // Redirige vers la page de l'événement
+      router.push("/events"); // Redirige vers la page de l'événement
     } else {
       alert(data.message); // Affiche une erreur
     }
