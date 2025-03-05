@@ -1,28 +1,35 @@
-import { StreamChat } from "stream-chat";
+import { StreamChat } from 'stream-chat';
 
-export async function GET(request) {
-  const { searchParams } = new URL(request.url);
-  const userId = searchParams.get("userId");
-
-  if (!userId) {
-    return new Response(JSON.stringify({ error: "userId est requis" }), {
-      status: 400,
-    });
-  }
-
-  const serverClient = StreamChat.getInstance(
-    process.env.STREAM_API_KEY,
-    process.env.STREAM_API_SECRET
-  );
-
+export const POST = async (req) => {
   try {
-    const token = serverClient.createToken(userId);
-    return new Response(JSON.stringify({ token }), { status: 200 });
-  } catch (err) {
-    console.error("Erreur lors de la génération du token :", err);
+    // Récupérer les données de la requête (ici, l'ID de l'utilisateur)
+    const { userId } = await req.json();
+
+    // Vérifiez que l'ID de l'utilisateur est fourni
+    if (!userId) {
+      return new Response(
+        JSON.stringify({ error: 'L\'ID de l\'utilisateur est requis' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Créer une instance du client Stream avec la clé API
+    const chatClient = StreamChat.getInstance('votre_clé_api_stream');
+
+    // Créer un token pour cet utilisateur
+    const token = chatClient.createToken(userId);
+
+    // Retourner le token dans la réponse
     return new Response(
-      JSON.stringify({ error: "Erreur lors de la génération du token" }),
-      { status: 500 }
+      JSON.stringify({ token }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
+    );
+
+  } catch (error) {
+    console.error('Erreur lors de la création du token :', error);
+    return new Response(
+      JSON.stringify({ error: 'Erreur lors de la création du token' }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
-}
+};
