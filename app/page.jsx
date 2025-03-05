@@ -146,7 +146,7 @@ export default function Home() {
           <br />
           <Link
             href="/contact"
-            className="inline-block bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+            className="inline-block bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition"
           >
             Contactez-nous
           </Link>
