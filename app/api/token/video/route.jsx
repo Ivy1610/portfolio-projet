@@ -1,4 +1,4 @@
-import { StreamVideo } from "@stream-io/video-react-sdk";
+import { StreamVideoClient } from "@stream-io/video-client";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -17,6 +17,7 @@ export async function GET(request) {
 
   try {
     const token = serverClient.createToken(userId);
+    await serverClient.updateUser({ id: userId, role: "viewer" });
     return new Response(JSON.stringify({ token }), { status: 200 });
   } catch (err) {
     console.error("Erreur lors de la génération du token :", err);

@@ -1,62 +1,75 @@
 "use client";
-import React from "react"; // Importez React une seule fois
-import { StreamChat } from "stream-chat";
-import { Chat, Channel, Window, ChannelHeader, MessageList, MessageInput } from "stream-chat-react";
+import { useEffect, useState, useRef } from "react";
 
-const ChatComponent = ({ user, eventId }) => {
-  const [chatClient, setChatClient] = React.useState(null); // Utilisez React.useState
+const Chat = ({ username }) => {
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  const ws = useRef(null);
 
-  React.useEffect(() => { // Utilisez React.useEffect
-    const initChat = async () => {
-      const client = StreamChat.getInstance("n3esdddgvfpz"); // Votre API Key
+  useEffect(() => {
+    // Se connecter au serveur WebSocket
+    ws.current = new WebSocket("ws://localhost:4000");
 
-      // Récupérer le token côté serveur
-      const response = await fetch(`/api/token/video?userId=Ivy24`);
-      const { token } = await response.json();
-
-      // Connecter l'utilisateur avec le token
-      await client.connectUser(
-        {
-          id: user.id,
-          name: user.name,
-        },
-        token
-      );
-
-      // Créer ou rejoindre un canal de chat
-      const channel = client.channel("messaging", `event-${eventId}`, {
-        name: `Event ${eventId}`,
-        members: [user.id],
-      });
-
-      await channel.watch(); // S'abonner au canal
-
-      setChatClient(client);
+    ws.current.onopen = () => {
+      console.log("Connecté au serveur WebSocket");
     };
 
-    initChat();
+    ws.current.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.type === "INITIAL_MESSAGES") {
+        setMessages(data.messages);
+      } else if (data.type === "NEW_MESSAGE") {
+        setMessages((prev) => [...prev, data.message]);
+      }
+    };
+
+    ws.current.onclose = () => {
+      console.log("Déconnecté du serveur WebSocket");
+    };
 
     // Nettoyer à la destruction du composant
     return () => {
-      if (chatClient) {
-        chatClient.disconnectUser();
-      }
+      if (ws.current) ws.current.close();
     };
-  }, [eventId, user.id, user.name]);
+  }, []);
 
-  if (!chatClient) return <div>Loading chat...</div>;
+  const sendMessage = () => {
+    if (ws.current && newMessage.trim() !== "") {
+      const message = {
+        username, // Utilisez le nom de l'utilisateur
+        text: newMessage,
+        timestamp: new Date().toISOString(),
+      };
+
+      ws.current.send(JSON.stringify(message));
+      setNewMessage("");
+    }
+  };
 
   return (
-    <Chat client={chatClient}>
-      <Channel channel={`event-${eventId}`}>
-        <Window>
-          <ChannelHeader />
-          <MessageList />
-          <MessageInput />
-        </Window>
-      </Channel>
-    </Chat>
+    <div className="chat-container">
+      <div className="chat-messages">
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`message ${msg.username === username ? "user" : ""}`}
+          >
+            <strong>{msg.username}:</strong> {msg.text}
+          </div>
+        ))}
+      </div>
+      <div className="chat-input">
+        <input
+          type="text"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          placeholder="Écris un message..."
+        />
+        <button onClick={sendMessage}>Envoyer</button>
+      </div>
+    </div>
   );
 };
 
-export default ChatComponent;
+export default Chat;
