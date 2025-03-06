@@ -1,5 +1,9 @@
 // components/GalleryManager.jsx
 import { useState } from 'react';
+import cloudinary from 'cloudinary-core';
+
+const cl = new cloudinary.Cloudinary({ cloud_name: 'dhgpzkoiz',
+  secure: true });
 
 export default function GalleryManager() {
   const [file, setFile] = useState(null);
@@ -16,29 +20,28 @@ export default function GalleryManager() {
     e.preventDefault();
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = async () => {
-      const base64data = reader.result;
-      try {
-        const response = await fetch('/api/upload', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ data: base64data }),
-        });
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', process.env.CLOUDINARY_UPLOAD_PRESET);
 
-        if (!response.ok) {
-          throw new Error('Erreur de réseau ou de reponse serveur');
-        }
+    try {
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/upload`, {
+        method: 'POST',
+        body: formData,
+      });
 
-        const data = await response.json();
-        setUrl(data.url);
-      } catch (error) {
-        console.error("Erreur lors de l\'upload:", error);
+      if (!response.ok) {
+        throw new Error('Erreur de réseau ou de reponse serveur');
       }
-    };
+
+      const data = await response.json();
+      setUrl(data.secure_url);
+
+      console.log('Upload reussi. PID:', data.pid);
+    } catch (error) {
+      console.error("Erreur lors de l'upload:", error);
+      console.log('PID de la requete:', '4a575598-eebb-4415-9d67-e80aafe22808');
+    }
   };
 
   const handleVideoSubmit = async (e) => {
