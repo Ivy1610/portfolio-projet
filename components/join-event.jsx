@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { connectToMongoose } from '@/lib/mongodb';
+
 
 const JoinEvent = () => {
   const router = useRouter();
@@ -13,10 +13,6 @@ const JoinEvent = () => {
     e.preventDefault();
 
     try {
-      // Connexion à MongoDB
-      await connectToMongoose();
-
-      // Vérifier l'accès à l'événement
       const response = await fetch(`/api/events/${eventId}/join`, {
         method: 'POST',
         headers: {
@@ -28,7 +24,8 @@ const JoinEvent = () => {
       if (response.ok) {
         router.push(`/events/${eventId}`); // Rediriger vers la page de l'événement
       } else {
-        console.error('Accès refusé');
+        const data = await response.json();
+        console.error(data.message);
       }
     } catch (error) {
       console.error('Erreur:', error);
@@ -38,7 +35,6 @@ const JoinEvent = () => {
   return (
     <div className="container mx-auto p-4 flex-grow">
       <h2 className="text-center text-3xl font-bold mb-6">Rejoindre un événement</h2>
-
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">
@@ -52,7 +48,6 @@ const JoinEvent = () => {
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           />
         </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Guest ID:
@@ -65,7 +60,6 @@ const JoinEvent = () => {
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           />
         </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Mot de passe:
@@ -78,7 +72,6 @@ const JoinEvent = () => {
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           />
         </div>
-
         <button
           type="submit"
           className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-300"

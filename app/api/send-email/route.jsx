@@ -17,14 +17,6 @@ export async function POST(req) {
     console.log("🔗 Connexion à MongoDB...");
     await connectToMongoose();
 
-    // verifie si l'email existe deja
-    const existingContact = await Contact.findOne
-    ({ email: email });
-    if (existingContact) {
-      console.log("❌ Email déjà utilisé");
-      return Response.json({ error: "Email déjà utilisé." }, { status: 400 });
-    }
-
     console.log("📝 Enregistrement du message dans MongoDB...");
     const newContact = new Contact({ name, email, message });
     await newContact.save();

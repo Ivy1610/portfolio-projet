@@ -7,7 +7,10 @@ const eventSchema = new mongoose.Schema({
   startTime: { type: String, required: true }, // Heure de début
   endTime: { type: String, required: true }, // Heure de fin
   numberOfGuests: { type: Number, required: true }, // Nombre d'invités
-  guests: [{ guestId: String, email: String }], // Liste des invités avec leur ID et e-mail
+  guests: [{ guestId: String, email: String }], // Liste des invités
+  streamUrl: { type: String }, // URL du live-stream (rempli après la création du stream)
+  playbackUrl: { type: String }, // URL de la vidéo après la fin du stream (rempli par Cloudinary)
+  isStreamActive: { type: Boolean, default: false }, // Statut du stream (actif/inactif)
 });
 
 const CreateEvent = mongoose.models.CreateEvent || mongoose.model('CreateEvent', eventSchema);
