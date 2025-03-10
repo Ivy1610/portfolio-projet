@@ -1,12 +1,13 @@
 "use client";
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { connectToMongoose } from '@/lib/mongodb';
+import { name } from '@stream-io/video-client';
 
 const CreateEvent = () => {
   const router = useRouter();
   const [eventDetails, setEventDetails] = useState({
     userId: '',
+    name: '',
     password: '',
     date: '',
     startTime: '',
@@ -24,12 +25,9 @@ const CreateEvent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
 
     try {
-      // Connexion à MongoDB via Mongoose
-      await connectToMongoose();
-
       // Envoyer les données à l'API pour créer l'événement
       const response = await fetch('/api/events', {
         method: 'POST',
@@ -64,6 +62,20 @@ const CreateEvent = () => {
             type="text"
             name="userId"
             value={eventDetails.userId}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Name:
+          </label>
+          <input
+            type="text"
+            name="name"
+            value={eventDetails.name}
             onChange={handleChange}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"

@@ -16,11 +16,17 @@ export async function POST(request) {
     await connectToMongoose();
 
     // Récupérer les données de la requête
-    const { userId, password, date, startTime, endTime, numberOfGuests } = await request.json();
+    const { userId, name, password, date, startTime, endTime, numberOfGuests } = await request.json();
+    console.log('Données de la requête:', { userId, name, password, date, startTime, endTime, numberOfGuests });
+
+    if (!userId || !name || !password || !date || !startTime || !endTime || !numberOfGuests) {
+      return NextResponse.json({ error: 'Veuillez remplir tous les champs' }, { status: 400 });
+    }
 
     // Créer un nouvel événement
     const newEvent = new CreateEvent({
       userId,
+      name,
       password,
       date,
       startTime,
@@ -29,33 +35,22 @@ export async function POST(request) {
       guests: [], // Initialiser une liste vide d'invités
     });
 
-    // Sauvegarder l'événement dans la base de données
+    console.log('Sauvegarde de l\'événement dans la base de données...');
     await newEvent.save();
 
-    // Générer des liens pour les invités
-    const guestLinks = [];
-    for (let i = 0; i < numberOfGuests; i++) {
-      const guestId = `guest-${newEvent._id}-${i}`; // Générer un ID unique pour chaque invité
-      const guestLink = `https://votresite.com/join-event?eventId=${newEvent._id}&guestId=${guestId}&password=${password}`;
-      guestLinks.push(guestLink);
+    // Envoyer les médias à Cloudinary si il y a des fichier a uploader et obtenir les URL
+    if (newEvent.streamURL && newEvent.playbackURl) {
+      console.log('Envoi des médias à Cloudinary...');
+      const mediaUrls = await uploadMediaToCloudinary(newEvent);
 
-      // Ajouter l'invité à la liste des invités de l'événement
-      newEvent.guests.push({ guestId });
+      // Mettre à jour l'événement avec les URL des médias
+      newEvent.streamUrl = mediaUrls.streamUrl;
+      newEvent.playbackUrl = mediaUrls.playbackUrl;
+      await newEvent.save();
     }
 
-    // Mettre à jour l'événement avec les invités
-    await newEvent.save();
-
-    // Envoyer les médias à Cloudinary et obtenir les URL
-    const mediaUrls = await uploadMediaToCloudinary(newEvent);
-
-    // Mettre à jour l'événement avec les URL des médias
-    newEvent.streamUrl = mediaUrls.streamUrl;
-    newEvent.playbackUrl = mediaUrls.playbackUrl;
-    await newEvent.save();
-
     // Retourner les liens générés (pour les envoyer par e-mail ou autre)
-    return NextResponse.json({ event: newEvent, guestLinks }, { status: 201 });
+    return NextResponse.json({ event: newEvent }, { status: 201 });
   } catch (error) {
     console.error('Erreur lors de la création de l\'événement:', error);
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
@@ -63,20 +58,36 @@ export async function POST(request) {
 }
 
 async function uploadMediaToCloudinary(event) {
-  // Fonction pour envoyer des médias à Cloudinary
-  // A adapter cette fonction selon vos besoins
-  const streamUrl = await cloudinary.uploader.upload(event.streamUrl, {
-    resource_type: 'video',
-    public_id: `stream_${event._id}`,
-  });
+  // Vérifier si les URL des médias sont présentes
+  if (!event.streamUrl || !event.playbackUrl) {
+    console.log('Aucun fichier média trouvé.');
+    return {
+      streamUrl: null,
+      playbackUrl: null,
+    };
+  }
 
-  const playbackUrl = await cloudinary.uploader.upload(event.playbackUrl, {
-    resource_type: 'video',
-    public_id: `playback_${event._id}`,
-  });
+  try {
+    // Fonction pour envoyer des médias à Cloudinary
+    const streamUrl = await cloudinary.uploader.upload(event.streamUrl, {
+      resource_type: 'video',
+      public_id: 'stream_${event._id}', // Dossier dans Cloudinary
+    });
 
-  return {
-    streamUrl: streamUrl.secure_url,
-    playbackUrl: playbackUrl.secure_url,
-  };
+    const playbackUrl = await cloudinary.uploader.upload(event.playbackUrl, {
+      resource_type: 'video',
+      public_id: `playback_${event._id}`,
+    });
+
+    return {
+      streamUrl: streamUrl.secure_url,
+      playbackUrl: playbackUrl.secure_url,
+    };
+  } catch (error) {
+    console.error('Erreur lors de l\'envoi des médias à Cloudinary:', error);
+    return {
+      streamUrl: null,
+      playbackUrl: null,
+    };
+  }
 }

@@ -1,7 +1,9 @@
+import { name } from '@stream-io/video-client';
 import mongoose from 'mongoose';
 
 const eventSchema = new mongoose.Schema({
   userId: { type: String, required: true }, // ID de l'utilisateur créateur
+  name: { type: String, required: true }, // Nom de l'événement
   password: { type: String, required: true }, // Mot de passe de l'événement
   date: { type: Date, required: true }, // Date de l'événement
   startTime: { type: String, required: true }, // Heure de début
