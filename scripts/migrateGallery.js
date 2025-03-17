@@ -1,5 +1,5 @@
 import { CreateGalleryItem } from '../models/Gallery';
-import { uploadImageToCloudinary, uploadVideoToCloudinary } from '../services/cloudinary';
+import { uploadImageToCloudinary, uploadVideoToCloudinary } from '../lib/cloudinary';
 
 const migrateGallery = async () => {
   const items = await CreateGalleryItem.find();

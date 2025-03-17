@@ -32,7 +32,7 @@ export default function Home() {
     <>
       <div className="space-y">
         {/* Bouton Login/Inscription */}
-        <Link href="/login">
+        <Link href="/register">
           <button className="w-34 bg-purple-700 text-white py-2 px-4 rounded-lg hover:bg-purple-400 transition">
             Inscription
           </button>
