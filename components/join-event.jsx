@@ -13,7 +13,7 @@ const JoinEvent = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`/api/events/${eventId}/join`, {
+      const response = await fetch(`/api/events/${eventId}/route`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

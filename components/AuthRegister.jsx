@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter} from "next/navigation";
 
-export default function AuthLogin() {
+export default function AuthRegister() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -10,7 +10,7 @@ export default function AuthLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("/api/Auths/Login", {
+    const response = await fetch("/api/Auths/Register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -19,6 +19,7 @@ export default function AuthLogin() {
     const data = await response.json();
     if (response.ok) {
       localStorage.setItem("token", data.token); // Stocke le token
+      localStorage.setItem("userId", data.userId); // Stocke l'ID de l'utilisateur
       router.push("/events"); // Redirige vers la page de l'événement
     } else {
       alert(data.message); // Affiche une erreur

@@ -1,14 +1,15 @@
 "use client";
 import { useState } from "react";
+import { useUser } from "@/app/context/UserContext";
 
 const LoginForm = ({ onLogin }) => {
-  const [username, setUsername] = useState("");
+  const [inputUsername, setInputUsername] = useState("");
+  const { setUsername } = useUser();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (username.trim() !== "") {
-      onLogin(username);
-    }
+    setUsername(inputUsername);
+    onLogin(inputUsername);
   };
 
   return (
@@ -17,8 +18,8 @@ const LoginForm = ({ onLogin }) => {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={inputUsername}
+          onChange={(e) => setInputUsername(e.target.value)}
           placeholder="Entrez votre nom"
           required
         />

@@ -1,5 +1,5 @@
 import { MongoClient } from "mongodb";
-import bcryptjs from 'bcryptjs';
+import bcrypt from 'bcrypt';
 
 const uri = process.env.MONGODB_URI;
 
@@ -10,7 +10,7 @@ if (!uri) {
 const client = new MongoClient(uri);
 
 // Fonction pour insérer un utilisateur
-export default async function insertUser(userData) {
+export default async function getUser(userData) {
   const { email, password, name } = userData;
 
   try {
@@ -19,21 +19,18 @@ export default async function insertUser(userData) {
     const usersCollection = db.collection('users');
 
     // Hacher le mot de passe avant de l'insérer
-    const salt = await bcryptjs.genSalt(10);
-    const hashedPassword = await bcryptjs.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = {
       email: email,
-      password: hashedPassword,
-      name: name,
-      createdAt: new Date().toISOString(),
+      //password: hashedPassword,
     };
 
-    const result = await usersCollection.insertOne(user);
-    console.log(`Utilisateur inséré avec l'ID : ${result.insertedId}`);
+    const result = await usersCollection.findOne(user);
+    console.log(`Utilisateur inséré avec l'ID : ${result}`);
 
     // Retourner un résultat de succès
-    return { success: true, userId: result.insertedId };
+    return result;
   } catch (error) {
     console.error("Erreur lors de l'insertion de l'utilisateur :", error);
 

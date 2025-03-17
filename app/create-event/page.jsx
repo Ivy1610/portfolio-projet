@@ -1,31 +1,60 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { name } from '@stream-io/video-client';
+import { jwtDecode } from "jwt-decode";
 
-const CreateEvent = () => {
+export default function CreateEvent() {
+  const [ userId, setUserId] = useState(null);
   const router = useRouter();
-  const [eventDetails, setEventDetails] = useState({
-    userId: '',
+
+  const [form, setForm] = useState({
     name: '',
     password: '',
     date: '',
-    startTime: '',
-    endTime: '',
-    numberOfGuests: 0,
+    startTime: '09:00',
+    endTime: '10:00',
+    numberOfGuests: 1
   });
 
+  const [error, setError] = useState({});
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setUserId(decoded.userId); // Extraction de userId du token
+      } catch (error) {
+        console.error("Erreur lors de la lecture du token:", error);
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+      }
+    }
+  }, []);
+  
+  const validateEventTime = () => {
+    const start = new Date(`${form.date}T${form.startTime}`);
+    const end = new Date(`${form.date}T${form.endTime}`);
+    return start < end;
+  };
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEventDetails((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!userId) {
+      console.error("Erreur: utilisateur non connecté");
+      return;
+    }
+
+    const eventDate = new Date(form.date);
+    if (eventDate < new Date()) {
+      console.error("Erreur: La date doit être ultérieure à aujourd\'hui");
+      return;
+    }
 
     try {
       // Envoyer les données à l'API pour créer l'événement
@@ -34,15 +63,22 @@ const CreateEvent = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(eventDetails),
+        body: JSON.stringify({
+          ...form,
+          userId
+        })
       });
 
+      const data = await response.json();
       if (response.ok) {
-        const data = await response.json();
-        console.log('Événement créé:', data);
+      console.log('Événement créé:', data);
         router.push('/events'); // Rediriger vers la page des événements
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       } else {
-        console.error('Erreur lors de la création de l\'événement');
+        console.error('Erreur lors de la création de l\'événement:', data);
       }
     } catch (error) {
       console.error('Erreur:', error);
@@ -56,26 +92,12 @@ const CreateEvent = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            User ID:
-          </label>
-          <input
-            type="text"
-            name="userId"
-            value={eventDetails.userId}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
             Name:
           </label>
           <input
             type="text"
             name="name"
-            value={eventDetails.name}
+            value={form.name}
             onChange={handleChange}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -89,7 +111,7 @@ const CreateEvent = () => {
           <input
             type="password"
             name="password"
-            value={eventDetails.password}
+            value={form.password}
             onChange={handleChange}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -103,7 +125,7 @@ const CreateEvent = () => {
           <input
             type="date"
             name="date"
-            value={eventDetails.date}
+            value={form.date}
             onChange={handleChange}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -117,7 +139,7 @@ const CreateEvent = () => {
           <input
             type="time"
             name="startTime"
-            value={eventDetails.startTime}
+            value={form.startTime}
             onChange={handleChange}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -131,7 +153,7 @@ const CreateEvent = () => {
           <input
             type="time"
             name="endTime"
-            value={eventDetails.endTime}
+            value={form.endTime}
             onChange={handleChange}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -145,7 +167,7 @@ const CreateEvent = () => {
           <input
             type="number"
             name="numberOfGuests"
-            value={eventDetails.numberOfGuests}
+            value={form.numberOfGuests}
             onChange={handleChange}
             required
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -162,5 +184,3 @@ const CreateEvent = () => {
     </div>
   );
 };
-
-export default CreateEvent;
