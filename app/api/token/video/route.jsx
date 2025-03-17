@@ -1,29 +1,32 @@
-import { StreamVideoClient } from "@stream-io/video-client";
-
-export async function GET(request) {
-  const { searchParams } = new URL(request.url);
-  const userId = searchParams.get("userId");
-
-  if (!userId) {
-    return new Response(JSON.stringify({ error: "userId est requis" }), {
-      status: 400,
-    });
+export default async function handler(req, res) {
+    const { channelName } = req.query;
+    const clientId = process.env.TWITCH_CLIENT_ID;
+    const accessToken = process.env.TWITCH_ACCESS_TOKEN;
+  
+    if (!channelName) {
+      return res.status(400).json({ error: "Le nom du canal est requis." });
+    }
+  
+    try {
+      const response = await fetch(
+        `https://api.twitch.tv/helix/streams?user_login=${channelName}`,
+        {
+          headers: {
+            "Client-ID": clientId,
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+  
+      const data = await response.json();
+      
+      if (data.data.length === 0) {
+        return res.status(404).json({ message: "Le stream est hors ligne." });
+      }
+  
+      res.status(200).json(data.data[0]);
+    } catch (error) {
+      res.status(500).json({ error: "Erreur lors de la récupération du stream." });
+    }
   }
-
-  const serverClient = new StreamVideo({
-    apiKey: process.env.STREAM_API_KEY,
-    secret: process.env.STREAM_API_SECRET,
-  });
-
-  try {
-    const token = serverClient.createToken(userId);
-    await serverClient.updateUser({ id: userId, role: "viewer" });
-    return new Response(JSON.stringify({ token }), { status: 200 });
-  } catch (err) {
-    console.error("Erreur lors de la génération du token :", err);
-    return new Response(
-      JSON.stringify({ error: "Erreur lors de la génération du token" }),
-      { status: 500 }
-    );
-  }
-}
+  

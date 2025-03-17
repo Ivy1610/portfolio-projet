@@ -1,20 +1,26 @@
-"use client";
+"use client"; // Indique que ce composant est côté client
 
-const LiveStream = ({ eventId }) => {
-  const streamUrl = ""; // ID de la vidéo YouTube
+import React from "react"; // utilisée pour créer des composants
+
+const TwitchLive = () => {
+  const channelName = "selii_mllr"; // stoker le nom de la chaîne Twitch
 
   return (
-    <div className="w-full">
+    <div style={{ width: "100%", maxWidth: "900px", margin: "0 auto", position: "relative", paddingTop: "56.25%" }}>
       <iframe
-        width="100%"
-        height="400"
-        src={`https://www.youtube.com/embed/${streamUrl}`}
-        title="Live Streaming"
-        frameBorder="0"
+        src={`https://player.twitch.tv/?channel=${channelName}&parent=localhost`}
+        style={{
+          position: "absolute",
+          top: "0",
+          left: "0",
+          width: "100%",
+          height: "100%",
+          border: "none"
+        }}
         allowFullScreen
       ></iframe>
     </div>
   );
 };
 
-export default LiveStream;
+export default TwitchLive;
