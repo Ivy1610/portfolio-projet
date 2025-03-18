@@ -34,6 +34,7 @@ const Event = () => {
     }
   };
 
+<<<<<<< HEAD
   const handleCreateEvent = async () => {
     try {
       const response = await fetch('/api/events/create', {
@@ -61,6 +62,15 @@ const Event = () => {
     }
   };
 
+=======
+  // Definir la fonction pour créer un événement
+   const handleCreateEvent = () => {
+    console.log("Créer un nouvel événement");
+    router.push("/create-event");
+  };
+
+
+>>>>>>> 56b609a2a60df74c9dde477c5e8e065c8c7df397
   return (
     <div className="container mx-auto p-4 flex-grow">
       <h2 className="text-center text-3xl font-bold mb-6">Événements en cours</h2>

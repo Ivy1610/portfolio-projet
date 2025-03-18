@@ -7,14 +7,13 @@ import LiveStream from "../../../components/Livestream";
 export default function EventPage({ params }) {
   const { eventId } = params;
   const [username, setUsername] = useState(null);
-  const [eventData, setEventData] = useState(null); // Ajout d'un état pour les données de l'événement
-
+  const [eventData, setEventData] = useState(null); 
+  
   // Fonction pour gérer la connexion de l'utilisateur
   const handleLogin = (username) => {
     setUsername(username);
   };
-
-  // Exemple : Récupération des données de l'événement côté client
+  // Récupération des données de l'événement côté client
   useEffect(() => {
     async function fetchEventData() {
       try {
