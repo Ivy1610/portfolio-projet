@@ -29,22 +29,36 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export default async function handler(req, res) {
-  const client = await clientPromise;
-  const db = client.db('youlive');
-  const collection = db.collection('events');
+export async function POST(req) {
+    try {
+      console.log('📡 Demande de recuperation des videos recue...');
 
-  if (req.method === 'POST') {
-    const { user_id, password } = req.body;
-    const event = await collection.findOne({ user_id, password });
-    if (event) {
-      const videos = event.videos || [];
-      res.status(200).json({ videos });
-    } else {
-      res.status(401).json({ message: 'Invalid credentials' });
+      const { user_id, password } = await req.json();
+      console.log('🔒 Verification des informations de connexion :', user_id);
+
+      const client = await clientPromise;
+      const db = client.db('youlive');
+      const collection = db.collection('events');
+
+      // verifie si l'utilisateur a un evenement correspondant
+      const event = await collection.findOne({ user_id, password });
+
+      if (!event) {
+        console.warn('event not found for user_id:', user_id);
+        return new Response(JSON.stringify({message: "event not found" }), { status: 404 });
+      }
+
+      // Recuperer les videos de l'evenement
+      const cloudinaryResponse = await cloudinary.v2.search
+        .expression('resource_type:video')
+        .sort_by('created_at', 'desc')
+        .max_results(30)  
+        .execute();
+
+        return new Response(JSON.stringify({ videos: cloudinaryResponse.resources }), { status: 200 });
+      } catch (error) {
+        console.error('Erreur lors de la recuperation des videos:', error);
+        return new Response(JSON.stringify({ message: 'Erreur du server' }), { status: 500 });
+      }
     }
-  } else {
-    res.setHeader('Allow', ['POST']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
-  }
-}
+  

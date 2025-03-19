@@ -14,7 +14,7 @@ export async function GET(request, { params }) {
         { status: 404 });
     }
 
-    /* Vérifier le mot de passe (pour les invités)
+    // Vérifier le mot de passe (pour les invités)
     const { guestId, password } = request.query;
     const guest = event.guests.find(g => g.guestId === guestId && g.password === password);
     if (!guest) {
@@ -24,7 +24,7 @@ export async function GET(request, { params }) {
     // Ajouter le guest à l'événement (à adapter selon votre logique)
     event.guests.push({ guestId, password });
     await event.save();
-    */
+    
 
     return NextResponse.json(event, { message: 'Rejoint avec succès' },
       { status: 200 });

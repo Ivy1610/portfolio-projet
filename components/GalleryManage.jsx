@@ -22,10 +22,10 @@ export default function GalleryManager() {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_preset', process.env.CLOUDINARY_UPLOAD_PRESET);
+    formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET);
 
     try {
-      const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/upload`, {
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -47,7 +47,7 @@ export default function GalleryManager() {
   const handleVideoSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/get-video', {
+      const response = await fetch('http://localhost:3000/api/get-video', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,10 +60,11 @@ export default function GalleryManager() {
       }
 
       const data = await response.json();
+      console.log('Videos recuperées:', data.videos);
       setVideos(data.videos);
     } catch (error) {
       console.error("Erreur lors de la recuperation des vidéo:", error);
-      alert('Une erreur est survenue lors de la récupération des vidéos.');
+      alert('Une erreur est survenue.');
     }
   };
 
