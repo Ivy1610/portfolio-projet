@@ -4,7 +4,7 @@ const WebSocket = require("ws");
 
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const ws = new WebSocket("ws://10.1.0.92:4000");
 
 const messages = [];
 

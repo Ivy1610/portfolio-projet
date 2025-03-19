@@ -10,6 +10,20 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+// 📌 Gérer la requête GET pour récupérer les événements
+export async function GET() {
+  try {
+    await connectToMongoose();
+    const events = await CreateEvent.find().lean(); // Récupère tous les événements depuis MongoDB
+    events.forEach(event => event.id = event._id.toString());
+
+    return NextResponse.json({ events }, { status: 200 });
+  } catch (error) {
+    console.error("Erreur lors de la récupération des événements :", error);
+    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+  }
+}
+
 export async function POST(request) {
   try {
     // Connexion à MongoDB

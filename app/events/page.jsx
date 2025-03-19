@@ -1,16 +1,42 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from "next/navigation";
 
 const Event = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const router = useRouter();
   const [error, setError] = useState(null);
-  const [events, setEvents] = useState([
+
+  // Evenements statiques
+const staticEvents = [
     { id: 2024, name: 'DEMODAY C24', date: "20 Mars", password: 'secret123' },
     { id: 2, name: 'Événement 2', password: 'event2024' },
     { id: 3, name: 'Concert Live', password: 'pass2025' },
-  ]);
+  ];
+
+  // Initialise les evenements statiques
+  const [events, setEvents] = useState(staticEvents);
+
+  const fetchEvents = async () => {
+    try{
+      const response = await fetch("/api/events");
+      if (!response.ok) throw new Error("Erreur lors de la recuperation des evenements.");
+      const data = await response.json();
+
+      console.log("Evénements récupérés depuis l'API:", data.events);
+      
+      // Fusionner les evenements statiques et ceux de la base de donnees
+      setEvents([...staticEvents, ...data.events]); 
+    } catch (err) {
+      console.error(err);
+      setError("Imposible de charger les événements.");
+    }
+  };
+
+  // Charger les événements au montage du composant
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
   const handleEventClick = (eventId) => {
     console.log("Événement sélectionné :", eventId);
@@ -34,43 +60,12 @@ const Event = () => {
     }
   };
 
-<<<<<<< HEAD
-  const handleCreateEvent = async () => {
-    try {
-      const response = await fetch('/api/events/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: 'Nouvel événement',
-          date: new Date().toLocaleDateString(),
-          password: 'defaultPassword',
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Erreur lors de la création de l\'événement');
-      }
-
-      const newEvent = await response.json();
-      console.log('Événement créé :', newEvent);
-      setEvents((prevEvents) => [...prevEvents, newEvent]);
-    } catch (error) {
-      console.error('Erreur :', error);
-      setError('Erreur lors de la création de l\'événement');
-    }
-  };
-
-=======
   // Definir la fonction pour créer un événement
    const handleCreateEvent = () => {
     console.log("Créer un nouvel événement");
     router.push("/create-event");
   };
 
-
->>>>>>> 56b609a2a60df74c9dde477c5e8e065c8c7df397
   return (
     <div className="container mx-auto p-4 flex-grow">
       <h2 className="text-center text-3xl font-bold mb-6">Événements en cours</h2>
@@ -83,7 +78,7 @@ const Event = () => {
         >
           Créer un nouvel événement
         </button>
-      </div>
+      </div> 
 
       {/* Liste des événements */}
       <div className="mb-8 bg-pink-150 p-6 rounded-lg shadow-md">
