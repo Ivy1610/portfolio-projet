@@ -40,17 +40,20 @@ export async function GET() {
 }
 
 export async function POST(req) {
-  try {
-    const { type, url } = await req.json();
+  try { 
+    const { type, url, fileName } = await req.json();
 
-    let cloudinaryUrl;
-
+    let result;
     if (type === 'image') {
-      cloudinaryUrl = await uploadImageToCloudinary(url);
+      result = await uploadImageToCloudinary(url);
     } else if (type === 'video') {
-      cloudinaryUrl = await uploadVideoToCloudinary(url);
+      result = await uploadVideoToCloudinary(url);
+      // Ajoutez une catégorie spéciale pour video.mp4
+      if (fileName === 'video.mp4') {
+        result.category = 'special_video';
+      }
     } else {
-      return new Response(JSON.stringify({ message: 'Type de ressource non supporté' }), {
+      return new Response(JSON.stringify({ message: 'Type non supporté' }), {
         headers: { "Content-Type": "application/json" },
         status: 400,
       });
@@ -59,8 +62,11 @@ export async function POST(req) {
     // Enregistrez la ressource dans MongoDB
     const newItem = new CreateGalleryItem({
       type,
-      url: cloudinaryUrl, // Utilisez l'URL Cloudinary
+      url: result.url, // Utilisez l'URL Cloudinary
+      public_id: result.public_id,
+      category: result.category || 'regular'
     });
+
     await newItem.save();
 
     return new Response(JSON.stringify({ message: 'Ressource ajoutée avec succès', data: newItem }), {
