@@ -1,25 +1,23 @@
 // Code to get videos from MongoDB
-import { MongoClient } from 'mongodb';
 import cloudinary from 'cloudinary';
+import { MongoClient } from 'mongodb';
 
 const uri = process.env.MONGODB_URI;
-const options = {};
-
 let client;
 let clientPromise;
 
 if (!process.env.MONGODB_URI) {
-  throw new Error('Please add your Mongo URI to .env.local');
+  throw new Error('Add Mongo URI to .env.local');
 }
 
 if (process.env.NODE_ENV === 'development') {
   if (!global._mongoClientPromise) {
-    client = new MongoClient(uri, options);
+    client = new MongoClient(uri);
     global._mongoClientPromise = client.connect();
   }
   clientPromise = global._mongoClientPromise;
 } else {
-  client = new MongoClient(uri, options);
+  client = new MongoClient(uri);
   clientPromise = client.connect();
 }
 
@@ -30,21 +28,32 @@ cloudinary.config({
 });
 
 export default async function handler(req, res) {
-  const client = await clientPromise;
-  const db = client.db('youlive');
-  const collection = db.collection('events');
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
 
-  if (req.method === 'POST') {
+  try {
+    const client = await clientPromise;
+    const db = client.db('youlive');
+    const collection = db.collection('gallery'); // Changé 'events' -> 'gallery'
+
     const { user_id, password } = req.body;
-    const event = await collection.findOne({ user_id, password });
-    if (event) {
-      const videos = event.videos || [];
-      res.status(200).json({ videos });
-    } else {
-      res.status(401).json({ message: 'Invalid credentials' });
+
+    // Validation des identifiants
+    if (user_id !== 'youlive' || password !== 'Azerty12') {
+      return res.status(401).json({ message: 'Invalid credentials' });
     }
-  } else {
-    res.setHeader('Allow', ['POST']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+
+    // Récupération des vidéos
+    const videos = await collection.find({
+      type: 'video',
+      public_id: { $exists: true }
+    }).toArray();
+
+    return res.status(200).json({ videos });
+
+  } catch (error) {
+    console.error('Error:', error);
+    return res.status(500).json({ message: 'Server error' });
   }
 }

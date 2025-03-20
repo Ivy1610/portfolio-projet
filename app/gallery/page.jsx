@@ -25,19 +25,37 @@ export default function GalleryPage() {
     fetchGallery();
   }, []);
 
+  // Séparation des médias
+  const specialVideo = galleryItems.find(item => item.category === 'special_video');
+  const regularMedia = galleryItems.filter(item => item.category !== 'special_video');
+
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold text-center mb-6">📸 Galerie</h1>
+
+      {/* Section vidéo spéciale */}
+      {specialVideo && (
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-center mb-4">Vidéo Principale</h2>
+          <div className="aspect-w-16 aspect-h-9">
+            <iframe
+              src={`https://player.cloudinary.com/embed/?cloud_name=${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}&public_id=${specialVideo.public_id}&profile=youlive-1`}
+              allowFullScreen
+              className="rounded-lg shadow-xl w-full h-full"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Galerie standard */}
       <h2 className="text-2xl font-bold text-center mb-4">Photos et Vidéos</h2>
 
-      {/* Gestion du chargement et des erreurs */}
       {loading && <p className="text-center text-gray-500">Chargement des images...</p>}
       {error && <p className="text-center text-red-500">{error}</p>}
 
-      {/* Affichage de la galerie */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {galleryItems.length > 0 ? (
-          galleryItems.map((item, index) => (
+        {regularMedia.length > 0 ? (
+          regularMedia.map((item, index) => (
             <div key={index} className="border p-2 rounded-lg shadow-md bg-white">
               {item.type === "image" ? (
                 <Image
@@ -49,23 +67,24 @@ export default function GalleryPage() {
                   style={{ width: 'auto', height: 'auto' }}
                 />
               ) : (
-                <iframe
-                  className="w-full h-52 rounded-md"
-                  src={item.url}
-                  title={`Gallery video ${index + 1}`}
-                  allowFullScreen
-                ></iframe>
+                <div className="relative" style={{ paddingTop: '56.25%' }}>
+                  <iframe
+                    className="absolute top-0 left-0 w-full h-full rounded-md"
+                    src={`https://player.cloudinary.com/embed/?cloud_name=${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}&public_id=a1chebfnwpxkyskqquus&profile=youlive-1`}
+                    title={`Gallery video ${index + 1}`}
+                    allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
               )}
             </div>
           ))
         ) : (
-          <p className="text-gray-500 text-center col-span-3">Aucune photo ou vidéo disponible.</p>
+          !loading && <p className="text-gray-500 text-center col-span-3">Aucune photo ou vidéo disponible.</p>
         )}
       </div>
-      
-      {/* Gestionaire de gallerie */}
+
       <GalleryManage />
-      </div>
+    </div>
   );
 }
-

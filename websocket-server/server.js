@@ -6,7 +6,7 @@ const WebSocket = require("ws"); // bibli pr gérer les connexions websocket
 // init du server server http est créé avec Express
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const ws = new WebSocket("ws://10.1.0.92:4000");
 
 const messages = []; // tbl pr stocker ts les messages du chat 
 // ecoute des connexion ws

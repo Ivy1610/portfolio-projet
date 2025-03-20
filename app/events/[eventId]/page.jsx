@@ -4,16 +4,16 @@ import LoginForm from "../../../components/LoginForm";
 import Chat from "../../../components/chat";
 import LiveStream from "../../../components/Livestream";
 
-export default function EventPage({ params }) {
-  const { eventId } = params;
+export default function EventPage({ eventId }) { // On passe eventId en prop
   const [username, setUsername] = useState(null);
-  const [eventData, setEventData] = useState(null); 
-  
+  const [eventData, setEventData] = useState(null);
+
   // Fonction pour gérer la connexion de l'utilisateur
   const handleLogin = (username) => {
     setUsername(username);
   };
-  // Récupération des données de l'événement côté client
+
+  // Exemple : Récupération des données de l'événement côté client
   useEffect(() => {
     async function fetchEventData() {
       try {
