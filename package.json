@@ -12,12 +12,8 @@
     "@stream-io/video-client": "^1.18.3",
     "@stream-io/video-react-sdk": "^1.12.4",
     "bcrypt": "^5.1.1",
-<<<<<<< HEAD
-    "hls.js": "^1.5.20",
-=======
-    "cloudinary": "^2.5.1",
+    "cloudinary": "^2.6.0",
     "cloudinary-core": "^2.13.1",
->>>>>>> 56b609a2a60df74c9dde477c5e8e065c8c7df397
     "ioredis": "^5.5.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.13.1",
@@ -29,14 +25,8 @@
     "react-dom": "^18.3.1",
     "react-icons": "^5.5.0",
     "stream-chat": "^8.57.6",
-<<<<<<< HEAD
-    "stream-chat-react": "^12.13.0",
-    "upgrade": "^1.1.0",
-    "ws": "^8.18.1"
-=======
     "stream-chat-react": "^12.13.1",
     "upgrade": "^1.1.0"
->>>>>>> 56b609a2a60df74c9dde477c5e8e065c8c7df397
   },
   "devDependencies": {
     "postcss": "^8",
