@@ -12,15 +12,10 @@
     "@stream-io/video-client": "^1.18.3",
     "@stream-io/video-react-sdk": "^1.12.4",
     "bcrypt": "^5.1.1",
-<<<<<<< HEAD
-    "cloudinary": "^2.6.0",
-    "cloudinary-core": "^2.13.1",
-=======
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.5.1",
     "cloudinary-core": "^2.13.1",
     "hls.js": "^1.5.20",
->>>>>>> 41f734c4a7b7ee48f46161ef8eb393fe04eb3e4c
     "ioredis": "^5.5.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.13.1",
