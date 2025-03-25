@@ -39,13 +39,13 @@ export async function POST(request) {
 
     // Créer un nouvel événement
     const newEvent = new CreateEvent({
-      userId,
-      name,
-      password,
-      date,
-      startTime,
-      endTime,
-      numberOfGuests,
+      "userId": "user123",
+      "name": "Nom de l'évenement",
+      "password": "mot_de_passe",
+      "date": "2024-01-01",
+      "startTime": "10:00",
+      "endTime": "12:00",
+      "numberOfGuests": 100,
       guests: [], // Initialiser une liste vide d'invités
     });
 

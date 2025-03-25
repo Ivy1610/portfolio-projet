@@ -47,7 +47,7 @@ export default async function handler(req, res) {
     // Récupération des vidéos
     const videos = await collection.find({
       type: 'video',
-      public_id: { $exists: true }
+      public_id: 'a1chebfnwpxkyskqquus'
     }).toArray();
 
     return res.status(200).json({ videos });
